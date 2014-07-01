@@ -44,16 +44,21 @@
                 return docElm.requestFullScreen || docElm.mozRequestFullScreen || docElm.webkitRequestFullScreen || docElm.msRequestFullscreen;
             }
          };
-         
+
          return serviceInstance;
       }]);
 
       module.directive('fullscreen', ['Fullscreen',  function(Fullscreen) {
          return {
+            scope: {
+              fullscreen : '='
+            },
             link : function ($scope, $element, $attrs) {
                // Watch for changes on scope if model is provided
                if ($attrs.fullscreen) {
-                  $scope.$watch($attrs.fullscreen, function(value) {
+                    $scope.$watch(function() {
+                      return $scope.fullscreen;
+                    }, function(value) {
                      var isEnabled = Fullscreen.isEnabled();
                      if (value && !isEnabled) {
                         Fullscreen.enable($element[0]);
